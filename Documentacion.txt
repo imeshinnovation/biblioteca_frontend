@@ -1,0 +1,15 @@
+React Paginas WEB, Aplicaciones WEB
+
+Integraciones, Rutas, Screens (Paginas), Capas de Presentación, Interacción con el Usuario
+
+Rutas -> EndPoint <- Backend
+Rutas -> Páginas o Screens <- FrontEnd
+
+Instalamos el modulo que permite gestionar las rutas
+npm i react-router-dom
+
+Manejo de Sesiones -> localStorage
+
+Instalamos Botstrap el Framework CSS
+
+npm i react-bootstrap bootstrap
