@@ -1,15 +1,30 @@
 
-const API_URI = 'http://192.168.0.23:9090'
+const API_URI = 'https://foolish-jorie-imeshinnovation.koyeb.app'
+//const API_URI = 'http://localhost:8000'
 
 const queryWithoutAuth = async (EndPoint, Method, body) => {
-    return await fetch(API_URI + EndPoint, {
+    return await fetch(EndPoint, {
         method: Method,
         headers: {
+            'Accept': 'application / json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(body)
-    }).then(resp => resp.json())
+    }).then(res => res.json())
+}
+
+const queryGet = async (EndPoint) => {
+    return await fetch(EndPoint, {
+        method: 'GET',
+        mode: 'no-cors',
+        headers: {
+            'Accept': 'application / json',
+            'Content-Type': 'application/json'
+        },
+    }).then((res) => {
+            return res.json()
+    })
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { API_URI, queryWithoutAuth }
+export default { API_URI, queryWithoutAuth, queryGet }

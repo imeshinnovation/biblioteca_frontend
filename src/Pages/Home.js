@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MainLayout from '../Layouts/MainLayout';
 import { Button, Card } from 'react-bootstrap';
 import TimePicker from '../Components/TimePicker';
+import Helpers from '../Libs/Helpers';
 
 function Home(props) {
+
+    const [ count, setCount ] = useState()
+
+  /*  useEffect(()=>{
+        Helpers.queryGet(`${Helpers.API_URI}/api/users/count`).then((datos)=>{
+            setCount(datos)
+        })
+    },[]) */
+
     return (
         <MainLayout>
         <Card>
@@ -12,6 +22,9 @@ function Home(props) {
             <Button onClick={(e) => { e.preventDefault(); localStorage.removeItem('token') }} variant='outline-success' >Salir</Button>
             <TimePicker ancho="200" color="cyan" />
                 </Card.Body>
+                <Card.Footer>
+                    { count }
+                </Card.Footer>
         </Card>
         </MainLayout>
     );

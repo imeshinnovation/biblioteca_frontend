@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Container, Form, InputGroup, Row, Button } from 'react-bootstrap';
 import Lottie from 'react-lottie';
 import * as animationData from '../Assets/Json/Biblioteca.json'
@@ -14,6 +14,7 @@ function Login(props) {
     const [mail, setMail] = useState()
     const [passwd, setPasswd] = useState()
     const [otp, setOtp] = useState()
+    const [ count, setCount ] = useState()
 
     const [steps, setSteps] = useState(0)
 
@@ -29,11 +30,16 @@ function Login(props) {
     const butNext = (e) => {
         e.preventDefault();
         if(steps === 0){
-            console.log(mail)
-            //const correo = Helpers.queryWithoutAuth('/api/users/verifyemail', 'POST', { email: mail });
-            setViewMail(false)
-            setViewPasswd(true)
-            setSteps(1)
+            Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/verifyemail`, 'POST', { email: mail }).then((data) => {
+                if(data.verify){
+                    setViewMail(false)
+                    setViewPasswd(true)
+                    setSteps(1)
+                } else {
+                    alert('Correo No Existe!')
+                }
+            })
+            
         } else if (steps === 1){
             console.log(passwd)
             setViewPasswd(false)
@@ -44,13 +50,20 @@ function Login(props) {
         }
     }
 
+    //useEffect(() => {
+    //    Helpers.queryGet(`${Helpers.API_URI}/api/users/count`).then((datos) => {
+    //        setCount(datos)
+    //    })
+    //}, [])
+
+
     return (
         <Container fluid className='mainContainer'>
             <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Row style={{ height: 500, width: '100%' }}>
                     <Col style={{ backgroundColor: 'rgba(255, 90, 0, 0)' }}>
                         <div className='fw-bold text-warning lilita' style={{ fontSize: 62, textShadow: '1px 1px 3px #009' }}>Biblioteca</div>
-                        <div className='text-light' style={{ fontSize: 32 }}>Gestión, Control y Prestamo de Libros</div>
+                        <div className='text-light' style={{ fontSize: 32 }}>Gestión, Control y Prestamo de Libros {count}</div>
                         <div style={{ height: 60, marginTop: 50 }}>
                             <InputGroup className='shadow-sm' style={{ height: 60, display: viewMail ? '' : 'none' }}>
                                 <Form.Control
