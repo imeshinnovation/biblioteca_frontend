@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Container, Form, InputGroup, Row, Button } from 'react-bootstrap';
+import { Col, Container, Form, InputGroup, Row, Button, Alert, Image } from 'react-bootstrap';
 import Lottie from 'react-lottie';
 import * as animationData from '../Assets/Json/Biblioteca.json'
 import Helpers from '../Libs/Helpers'
@@ -14,9 +14,16 @@ function Login(props) {
     const [mail, setMail] = useState()
     const [passwd, setPasswd] = useState()
     const [otp, setOtp] = useState()
-    const [ count, setCount ] = useState()
+    const [count, setCount] = useState()
 
     const [steps, setSteps] = useState(0)
+
+    const [viewAlert, setViewAlert] = useState(false)
+    const [msgAlert, setMsgAlert] = useState('')
+    const [variantAlert, setVariantAlert] = useState('')
+    const [viewQR, setViewQR] = useState(false)
+    const [image64, setImage64] = useState('')
+    const [getID, setGetID] = useState('')
 
     const defaultOptions = {
         loop: true,
@@ -27,26 +34,60 @@ function Login(props) {
         }
     };
 
+    const showAlert = (msg, variant, tiempo) => {
+        setMsgAlert(msg)
+        setVariantAlert(variant)
+        setViewAlert(true)
+        setTimeout(() => {
+            setViewAlert(false)
+        }, tiempo)
+    }
+
     const butNext = (e) => {
         e.preventDefault();
-        if(steps === 0){
+        if (steps === 0) {
             Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/verifyemail`, 'POST', { email: mail }).then((data) => {
-                if(data.verify){
+                if (data.verify) {
                     setViewMail(false)
                     setViewPasswd(true)
                     setSteps(1)
                 } else {
-                    alert('Correo No Existe!')
+                    showAlert('Correo No Existe, Verifica e Intenta Nuevamente!', 'danger', 5000)
                 }
             })
-            
-        } else if (steps === 1){
-            console.log(passwd)
-            setViewPasswd(false)
-            setViewOtp(true)
-            setSteps(2)
-        } else if (steps === 2){
-            console.log(otp)
+
+        } else if (steps === 1) {
+            Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/verifyemailpasswd`, 'POST', { email: mail, password: passwd }).then((data) => {
+                console.log(data)
+                if (data.verify) {
+                    Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/qr`, 'POST', { id: data.id }).then((imagen) => {
+                        console.log(imagen.qr)
+                        setImage64(imagen.qr)
+                        if(data.a2f === 0){
+                            setViewQR(true)
+                        }
+                        
+                    })
+                    setGetID(data.id)
+                    setViewPasswd(false)
+                    setViewOtp(true)
+                    setSteps(2)
+                } else {
+                    showAlert('Contraseña Incorrecta, Verifica e Intenta Nuevamente!', 'danger', 5000)
+                }
+            })
+
+        } else if (steps === 2) {
+            Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/verify`, 'POST', { id: getID, otp }).then((data) => {
+                if(data.verify){
+                    Helpers.queryWithoutAuth(`${Helpers.API_URI}/api/users/upd`, 'POST', { id: getID, a2f: 1 }).then((result) => {
+                        console.log(result)
+                    })
+                    localStorage.setItem('token', data.verify)
+                } else {
+                    showAlert('Código de Seguridad Incorrecto, Verifica e Intenta Nuevamente!', 'danger', 5000)
+                }
+            })
         }
     }
 
@@ -58,7 +99,17 @@ function Login(props) {
 
 
     return (
+
         <Container fluid className='mainContainer'>
+            <div style={{ justifyContent: 'center', alignItems: 'center', position: 'fixed', width: '100%', margin: 0, padding: 20 }}>
+                <Alert variant={variantAlert} className='shadow-sm' style={{
+                    flex: 1,
+                    textAlign: 'center',
+                    width: 'auto',
+                    margin: 0,
+                    display: viewAlert ? 'block' : 'none'
+                }}>{msgAlert}</Alert>
+            </div>
             <Container style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Row style={{ height: 500, width: '100%' }}>
                     <Col style={{ backgroundColor: 'rgba(255, 90, 0, 0)' }}>
@@ -92,10 +143,19 @@ function Login(props) {
                         </div>
                     </Col>
                     <Col>
+                    { viewQR ?
+                        <Image src={image64} style={{
+                            height: 400,
+                            width: 400,
+                            borderRadius: 10,
+                            boxShadow: '0px 0px 10px #345'
+                        }} />
+                        :
                         <Lottie options={defaultOptions}
                             height={400}
                             width={400}
                         />
+                    }
                     </Col>
                 </Row>
             </Container>

@@ -1,6 +1,6 @@
 
-const API_URI = 'https://foolish-jorie-imeshinnovation.koyeb.app'
-//const API_URI = 'http://localhost:8000'
+//const API_URI = 'https://foolish-jorie-imeshinnovation.koyeb.app'
+const API_URI = 'http://localhost:8000'
 
 const queryWithoutAuth = async (EndPoint, Method, body) => {
     return await fetch(EndPoint, {

@@ -23,7 +23,7 @@ function Home(props) {
             <TimePicker ancho="200" color="cyan" />
                 </Card.Body>
                 <Card.Footer>
-                    { count }
+                    { localStorage.getItem('token') }
                 </Card.Footer>
         </Card>
         </MainLayout>
