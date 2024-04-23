@@ -14,7 +14,7 @@ function MainLayout({ children }) {
         <>
             <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Biblioteca</Offcanvas.Title>
+                    <Offcanvas.Title>Biblioteca Digital</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Accordion defaultActiveKey="0">
@@ -43,7 +43,7 @@ function MainLayout({ children }) {
                             <FontAwesomeIcon icon={faBars} />
                         </Button>
                     </div>
-                    <div><h1 className='lilita'>Bienvenido a la Biblioteca</h1></div>
+                    <div><h1 className='lilita'>Biblioteca Digital</h1></div>
                 </div>
                 <Card style={{
                     height: 'calc(100vh - 130px)',
