@@ -17,7 +17,7 @@ function MainLayout({ children }) {
                     <Offcanvas.Title>Biblioteca Digital</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Accordion defaultActiveKey="0">
+                    <Accordion>
                         <Accordion.Item eventKey="0">
                             <Accordion.Header>Perfíl del Usuario</Accordion.Header>
                             <Accordion.Body>
@@ -43,7 +43,7 @@ function MainLayout({ children }) {
                             <FontAwesomeIcon icon={faBars} />
                         </Button>
                     </div>
-                    <div><h1 className='lilita'>Biblioteca Digital</h1></div>
+                    <div><span className='h2 fw-bold'>Biblioteca Digital</span></div>
                 </div>
                 <Card style={{
                     height: 'calc(100vh - 130px)',
