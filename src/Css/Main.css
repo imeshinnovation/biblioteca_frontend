@@ -17,6 +17,26 @@
     font-family: 'Poppins Regular';
 }
 
+* {
+    scrollbar-width: 2;
+    scrollbar-color: rgb(255, 0, 89) rgb(0, 64, 255);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 25px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgb(0, 123, 255);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 0, 102);
+    border-radius: 20px;
+    border: 0px solid orange;
+}
+
 .boldItalic {
     font-family: 'Poppins BoldItalic';
     font-size: 32px;
@@ -32,4 +52,12 @@
     height: 100vh !important;
     padding: 0px;
     margin: 0px;
+}
+
+.headerTitle {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    height: 60px;
 }

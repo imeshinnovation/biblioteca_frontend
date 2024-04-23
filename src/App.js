@@ -6,6 +6,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Cuenta from './Pages/Cuenta';
 import Error405 from './Pages/Error405';
+import Helpers from './Libs/Helpers';
 
 function App(props) {
 
@@ -14,10 +15,12 @@ function App(props) {
   React.useEffect(()=>{
     setInterval(()=>{
       if (localStorage.getItem('token')) {
+        Helpers.expireToken(Helpers.decodeJWT(localStorage.getItem('token')))
         setToken(localStorage.getItem('token'))
       } else {
         setToken(null)
       }
+      
     },1000)
     
   }, [token])
